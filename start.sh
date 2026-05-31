@@ -1,14 +1,17 @@
 
 #this script must be executed with super user privileges
 if [ "$EUID" -ne 0 ]; then
-  echo "This script needs super user privleges."
+	echo "This script needs super user privleges."
+  	exit 1
 fi
 
+chmod +x modules/*.sh
+
+#========================AutoInstall Scripts============================
 #hub config (laptop working with lid off)
 ./modules/logind.sh
-
 #install packages
-#to do.
+./modules/packages.sh
 
 #install scripts 
 #to do.
