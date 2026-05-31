@@ -5,7 +5,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 #hub config (laptop working with lid off)
-./scripts/logind.sh
+./modules/logind.sh
 
 #install packages
 #to do.
@@ -15,6 +15,9 @@ fi
 
 
 
+
+
+#copy /tmp/autoconf/configs into configs/
 
 #reboot daemons
 systemctl daemon-reload
