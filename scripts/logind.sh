@@ -12,15 +12,18 @@ backup_file="/tmp/autoconf/hub/logind.conf.bak"
 
 mkdir -p "$backup_dir"
 cp "$dst_file" "$backup_file"
-" 
-sed -i "s/#HandleLidSwitch=.*/#HandleLidSwitch=ignore/g" "$dst_file"
-sed -i "s/#HandleLidSwitchExternalPower=.*/#HandleLidSwitchExternalPower=ignore/g" "$dst_file"
+ 
+sed -i "s/^#\?HandleLidSwitch=.*/HandleLidSwitch=ignore/g" "$dst_file"
+sed -i "s/^#\?HandleLidSwitchExternalPower=.*/HandleLidSwitchExternalPower=ignore/g" "$dst_file"
 
-if grep -q "HandleLidSwitch=ignore" "$dst_file" && grep -q "HandleLidSwitchExternalPower=ignore" "$dst_file"; then
+if grep -q "^HandleLidSwitch=ignore" "$dst_file" && grep -q "^HandleLidSwitchExternalPower=ignore" "$dst_file"; then
 	# logind.conf modified, service must be restarted
-	systemctl restart systemd-logind
+	# systemctl restart systemd-logind
+	# with daemon-reload, at the main program should be fine
+	echo "/etc/systemd/logind.conf config applied succesfully"
 else
 	mv "$backup_file" "$dst_file"
+	echo "ERROR: /etc/systemd/logind.conf, configuration not applied"
 	exit 1
 fi
 

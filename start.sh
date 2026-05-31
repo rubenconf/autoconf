@@ -5,4 +5,17 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 #hub config (laptop working with lid off)
-./hub/config.sh
+./scripts/logind.sh
+
+#install packages
+#to do.
+
+#install scripts 
+#to do.
+
+
+
+
+#reboot daemons
+systemctl daemon-reload
+echo "Please, reboot your system to make sure that all changes can be applied"
