@@ -7,8 +7,8 @@
 # edit /etc/systemd/logind.conf
 
 dst_file="/etc/systemd/logind.conf"
-backup_dir="/tmp/autoconf/configs"
-backup_file="/tmp/autoconf/configs/logind.conf.bak"
+backup_dir="/tmp/autoconf/backup"
+backup_file="/tmp/autoconf/backup/logind.conf.bak"
 
 mkdir -p "$backup_dir"
 cp "$dst_file" "$backup_file"
