@@ -21,10 +21,6 @@
   "modules": [
     {
       "type": "custom",
-      "format": "     󱇐 : Crafted my way."
-    },
-    {
-      "type": "custom",
       "format": "   ╭───────────────────────────────────────╮"
     },
     {
@@ -57,20 +53,6 @@
       "type": "wm",
       "key": "     󱂬 WM      ",
       "keyColor": "35"
-    },
-    {
-      "type": "custom",
-      "format": "   ╰───────────────────────────────────────╯"
-    },
-    "break",
-    {
-      "type": "title",
-      "key": "     󰮚",
-      "format": "{1} @ {2}"
-    },
-    {
-      "type": "custom",
-      "format": "   ╭────────────────────────────────────────────╮"
     },
     {
       "type": "cpu",
