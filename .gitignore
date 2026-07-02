@@ -1,1 +1,5 @@
-configs/*
+.ssh/
+.env
+*.log
+.cache/
+.local/share/keyrings/

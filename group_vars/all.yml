@@ -1,0 +1,38 @@
+packages:
+  - nano
+  - hyprland
+  - kitty
+  - waybar
+  - git
+  - neovim
+  - nmap
+  - curl
+  - unzip
+  - docker
+  - rsync
+  - rofi
+  - fastfetch
+  - pipewire
+  - pavucontrol
+  - pamixer
+  - wireplumber
+  - ttf-nerd-fonts-symbols
+  - ttf-font-awesome
+  - ttf-jetbrains-mono-nerd
+  - wlogout
+  - jq
+  - network-manager-applet
+  - networkmanager
+  - fish
+  - swaybg
+  - swww
+  - blueman
+  - bluez
+  - bluez-utils
+  - nwg-look
+  - nautilus
+  - firefox
+  - eza
+
+folders:
+  - "{{ ansible_facts['user_dir'] }}/.config"

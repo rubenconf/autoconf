@@ -1,0 +1,6 @@
+---
+- name: Autoinstall dotfiles
+  hosts: vm
+  roles:
+    - dotfiles
+    - system

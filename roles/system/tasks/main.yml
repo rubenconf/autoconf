@@ -1,0 +1,31 @@
+---
+- name: Update pacman cache
+  pacman:
+    update_cache: yes
+  become: true
+
+- name: Install all packages
+  pacman:
+    name: "{{ packages }}"
+    state: present
+  become: true
+
+# Fish installation
+- name: Check if fish is installed
+  pacman:
+    name: fish
+    state: present
+  become: true
+
+- name: Change default shell to fish
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/fish
+  become: true
+
+- name: Install oh-my-posh
+  shell: |
+    mkdir -p "{{ ansible_facts['user_dir'] }}/.local/bin"
+    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "{{ ansible_facts['user_dir'] }}/.local/bin"
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/oh-my-posh"

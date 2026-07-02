@@ -1,0 +1,57 @@
+---
+- name: Base dir exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ folders }}"
+
+- name: Syncronize dotfiles into host machine
+  synchronize:
+    src: "{{ role_path }}/files/"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/"
+    recursive: yes
+    delete: yes
+    rsync_opts:
+      - "--quiet"
+      - "--rsync-path=rsync"
+
+# Fish installation
+- name: Check if fish is installed
+  pacman:
+    name: fish
+    state: present
+  become: true
+
+- name: Change default shell to fish
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/fish
+  become: true
+
+- name: Install oh-my-posh
+  shell: |
+    mkdir -p "{{ ansible_facts['user_dir'] }}/.local/bin"
+    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "{{ ansible_facts['user_dir'] }}/.local/bin"
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/oh-my-posh"
+
+#this is not working, using swaybg instead
+- name: Hyprpaper dynamic config
+  template:
+    src: "{{ role_path }}/files/hypr/hyprpaper_template.conf"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/hypr/hyprpaper.conf"
+
+- name: Check if .icons directory exists
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.icons"
+    state: directory
+
+- name: Syncronize themes
+  synchronize:
+    src: "{{ role_path }}/files/hypr/assets/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.icons/"
+    recursive: yes
+    delete: no
+  loop:
+    - kora
+    - Bibata-Modern-Ice
