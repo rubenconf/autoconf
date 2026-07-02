@@ -2,10 +2,10 @@
 
 This repository provides a modular, automated approach to deploying system configurations and dotfiles using Ansible.
 
-> It includes my dotfiles and system configuration, so the package list is meant for reference only. It should work for any system but it is compatible with CachyOS.
+> It includes my dotfiles and system configuration, so the package list is meant for reference only. It should work for any system but it is compatible with CachyOS. These dotfiles are based on the [ML4W project](https://github.com/mylinuxforwork/dotfiles).
 
 ## Project Architecture
-```
+```text
 autoinstall/
 ├── hosts.ini           
 ├── setup.yml           
@@ -30,7 +30,7 @@ sudo pacman -S python
 
 ## Configuration
 Update the inventory file (hosts.ini) with your target machine's details:
-```hosts.ini
+```ini
 [vm]
 host_ip_address ansible_user=your_username
 ```
@@ -53,13 +53,13 @@ After configuring SSH keys (e.g., using ssh-copy-id user@192.168.X.X), verify th
 ansible -i hosts.ini vm -m ping
 ```
 The expected successful response is:
-```text
+```json
 192.168.122.170 | SUCCESS => {
-"ansible_facts": {
-"discovered_interpreter_python": "/usr/bin/python3"
-},
-"changed": false,
-"ping": "pong"
+  "ansible_facts": {
+    "discovered_interpreter_python": "/usr/bin/python3"
+  },
+  "changed": false,
+  "ping": "pong"
 }
 ```
 

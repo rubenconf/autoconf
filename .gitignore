@@ -3,3 +3,4 @@
 *.log
 .cache/
 .local/share/keyrings/
+vm.ini
