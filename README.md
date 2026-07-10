@@ -34,6 +34,7 @@ Update the inventory file (hosts.ini) with your target machine's details:
 [vm]
 host_ip_address ansible_user=your_username
 ```
+> Note: If you are running this on your local machine, use `ansible_connection=local` instead of an IP address and `ansible_user` to avoid SSH requirements
 
 Set the target host in setup.yml:
 ```yaml
