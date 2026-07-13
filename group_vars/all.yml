@@ -33,6 +33,13 @@ packages:
   - nautilus
   - firefox
   - eza
+  - grim
+  - slurp
+  - swappy
+  - hyprlock
+  - gnome-themes-extra
+  - adw-gtk-theme
+  - wl-clipboard
 
 folders:
   - "{{ ansible_facts['user_dir'] }}/.config"

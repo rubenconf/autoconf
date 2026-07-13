@@ -1,18 +1,23 @@
 ---
 - name: Update pacman cache
-  pacman:
+  package:
     update_cache: yes
+    upgrade: yes
   become: true
 
+- name: Debug package variable
+  debug:
+    var: packages
+
 - name: Install all packages
-  pacman:
+  community.general.pacman:
     name: "{{ packages }}"
     state: present
   become: true
 
 # Fish installation
 - name: Check if fish is installed
-  pacman:
+  package:
     name: fish
     state: present
   become: true
@@ -29,3 +34,22 @@
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "{{ ansible_facts['user_dir'] }}/.local/bin"
   args:
     creates: "{{ ansible_facts['user_dir'] }}/.local/bin/oh-my-posh"
+
+- name: Initialize XDG (Desktop, Downloads, etc.)
+  command: xdg-user-dirs-update
+  changed_when: false
+
+- name: Creates nautilus marks
+  copy:
+    dest: "{{ ansible_facts['user_dir'] }}/.config/gtk-3.0/bookmarks"
+    content: |
+      file:///{{ ansible_facts['user_dir'] }}/Desktop
+      file:///{{ ansible_facts['user_dir'] }}/Documents Docs
+      file:///{{ ansible_facts['user_dir'] }}/Projects
+      file:///{{ ansible_facts['user_dir'] }}/Pictures
+    mode: '0644'
+
+- name: Install Zed
+  shell: curl -f https://zed.dev/install.sh | sh
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/zed"

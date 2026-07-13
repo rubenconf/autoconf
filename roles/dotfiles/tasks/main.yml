@@ -5,22 +5,14 @@
     state: directory
   loop: "{{ folders }}"
 
-- name: Syncronize dotfiles into host machine
-  synchronize:
+- name: Synchronize dotfiles
+  ansible.posix.synchronize:
     src: "{{ role_path }}/files/"
     dest: "{{ ansible_facts['user_dir'] }}/.config/"
     recursive: yes
-    delete: yes
-    rsync_opts:
-      - "--quiet"
-      - "--rsync-path=rsync"
-
-# Fish installation
-- name: Check if fish is installed
-  pacman:
-    name: fish
-    state: present
-  become: true
+    delete: no
+    archive: yes
+  become: false
 
 - name: Change default shell to fish
   user:
@@ -47,7 +39,7 @@
     state: directory
 
 - name: Syncronize themes
-  synchronize:
+  ansible.posix.synchronize:
     src: "{{ role_path }}/files/hypr/assets/{{ item }}"
     dest: "{{ ansible_facts['user_dir'] }}/.icons/"
     recursive: yes
@@ -55,3 +47,10 @@
   loop:
     - kora
     - Bibata-Modern-Ice
+
+- name: Waybar Config
+  template:
+    src: "{{ role_path }}/files/waybar/config.j2"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/waybar/config"
+    mode: '0644'
+  become: false
