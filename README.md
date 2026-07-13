@@ -28,6 +28,12 @@ On the target machine, ensure Python is installed:
 sudo pacman -S python
 ```
 
+```
+ansible-galaxy collection install community.general
+ansible-galaxy collection install ansible.posix
+```
+
+
 ## Configuration
 Update the inventory file (hosts.ini) with your target machine's details:
 ```ini
