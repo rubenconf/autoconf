@@ -53,3 +53,26 @@
   shell: curl -f https://zed.dev/install.sh | sh
   args:
     creates: "{{ ansible_facts['user_dir'] }}/.local/bin/zed"
+
+- name: Create /nix dir
+  become: yes
+  file:
+    path: /nix
+    state: directory
+    owner: "{{ ansible_facts['user_id'] }}"
+    group: "{{ ansible_facts['user_id'] }}"
+    mode: '0755'
+
+- name: Install nix
+  shell: |
+    curl --proto '=https' --tlsv1.2 -sSf -L https://nixos.org/nix/install | sh -s -- --no-daemon
+  args:
+    creates: /nix/var/nix/profiles/default/bin/nix
+
+- name: Enable Synthing.service 
+  systemd:
+    name: syncthing
+    enabled: yes
+    state: started
+    scope: user
+  become: no
