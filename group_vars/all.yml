@@ -43,6 +43,7 @@ packages:
   - firejail
   - obsidian
   - syncthing
+  - nwg-displays
 
 folders:
   - "{{ ansible_facts['user_dir'] }}/.config"
