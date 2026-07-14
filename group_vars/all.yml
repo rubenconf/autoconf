@@ -44,6 +44,6 @@ packages:
   - obsidian
   - syncthing
   - nwg-displays
-
+  - mako
 folders:
   - "{{ ansible_facts['user_dir'] }}/.config"
