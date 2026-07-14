@@ -38,12 +38,13 @@
     path: "{{ ansible_facts['user_dir'] }}/.icons"
     state: directory
 
-- name: Syncronize themes
-  ansible.posix.synchronize:
-    src: "{{ role_path }}/files/hypr/assets/{{ item }}"
-    dest: "{{ ansible_facts['user_dir'] }}/.icons/"
-    recursive: yes
-    delete: no
+- name: Unarchive themes
+  unarchive:
+    src: "{{ role_path }}/files/hypr/assets/{{ item }}.tar.gz"
+    dest: "{{ ansible_facts['user_dir'] }}/.local/share/icons/"
+    remote_src: no
+    owner: "{{ ansible_facts['user_id'] }}"
+    group: "{{ ansible_facts['user_id'] }}"
   loop:
     - kora
     - Bibata-Modern-Ice
