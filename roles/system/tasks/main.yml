@@ -1,0 +1,78 @@
+---
+- name: Update pacman cache
+  package:
+    update_cache: yes
+    upgrade: yes
+  become: true
+
+- name: Debug package variable
+  debug:
+    var: packages
+
+- name: Install all packages
+  community.general.pacman:
+    name: "{{ packages }}"
+    state: present
+  become: true
+
+# Fish installation
+- name: Check if fish is installed
+  package:
+    name: fish
+    state: present
+  become: true
+
+- name: Change default shell to fish
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/fish
+  become: true
+
+- name: Install oh-my-posh
+  shell: |
+    mkdir -p "{{ ansible_facts['user_dir'] }}/.local/bin"
+    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "{{ ansible_facts['user_dir'] }}/.local/bin"
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/oh-my-posh"
+
+- name: Initialize XDG (Desktop, Downloads, etc.)
+  command: xdg-user-dirs-update
+  changed_when: false
+
+- name: Creates nautilus marks
+  copy:
+    dest: "{{ ansible_facts['user_dir'] }}/.config/gtk-3.0/bookmarks"
+    content: |
+      file:///{{ ansible_facts['user_dir'] }}/Desktop
+      file:///{{ ansible_facts['user_dir'] }}/Documents Docs
+      file:///{{ ansible_facts['user_dir'] }}/Projects
+      file:///{{ ansible_facts['user_dir'] }}/Pictures
+    mode: '0644'
+
+- name: Install Zed
+  shell: curl -f https://zed.dev/install.sh | sh
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/zed"
+
+- name: Create /nix dir
+  become: yes
+  file:
+    path: /nix
+    state: directory
+    owner: "{{ ansible_facts['user_id'] }}"
+    group: "{{ ansible_facts['user_id'] }}"
+    mode: '0755'
+
+- name: Install nix
+  shell: |
+    curl --proto '=https' --tlsv1.2 -sSf -L https://nixos.org/nix/install | sh -s -- --no-daemon
+  args:
+    creates: /nix/var/nix/profiles/default/bin/nix
+
+- name: Enable Synthing.service 
+  systemd:
+    name: syncthing
+    enabled: yes
+    state: started
+    scope: user
+  become: no

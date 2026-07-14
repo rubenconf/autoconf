@@ -1,0 +1,8 @@
+---
+- name: Autoinstall dotfiles
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  roles:
+    - dotfiles
+    - system

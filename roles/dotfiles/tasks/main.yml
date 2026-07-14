@@ -1,0 +1,57 @@
+---
+- name: Base dir exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ folders }}"
+
+- name: Synchronize dotfiles
+  ansible.posix.synchronize:
+    src: "{{ role_path }}/files/"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/"
+    recursive: yes
+    delete: no
+    archive: yes
+  become: false
+
+- name: Change default shell to fish
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/fish
+  become: true
+
+- name: Install oh-my-posh
+  shell: |
+    mkdir -p "{{ ansible_facts['user_dir'] }}/.local/bin"
+    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d "{{ ansible_facts['user_dir'] }}/.local/bin"
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.local/bin/oh-my-posh"
+
+#this is not working, using swaybg instead
+- name: Hyprpaper dynamic config
+  template:
+    src: "{{ role_path }}/files/hypr/hyprpaper_template.conf"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/hypr/hyprpaper.conf"
+
+- name: Check if .icons directory exists
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.icons"
+    state: directory
+
+- name: Unarchive themes
+  unarchive:
+    src: "{{ role_path }}/files/hypr/assets/{{ item }}.tar.gz"
+    dest: "{{ ansible_facts['user_dir'] }}/.local/share/icons/"
+    remote_src: no
+    owner: "{{ ansible_facts['user_id'] }}"
+    group: "{{ ansible_facts['user_id'] }}"
+  loop:
+    - kora
+    - Bibata-Modern-Ice
+
+- name: Waybar Config
+  template:
+    src: "{{ role_path }}/files/waybar/config.j2"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/waybar/config"
+    mode: '0644'
+  become: false
